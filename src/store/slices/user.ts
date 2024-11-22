@@ -7,7 +7,7 @@ const themeLsValue = getLS(THEME_LS_KEY);
 
 const initialState = {
   token: null,
-  theme: themeLsValue ? themeLsValue : window.Telegram.WebApp.colorScheme,
+  theme: themeLsValue ? themeLsValue : 'dark',
 };
 
 const userSlice = createSlice({
