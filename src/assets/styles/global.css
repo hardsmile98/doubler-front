@@ -1,0 +1,22 @@
+:root {
+  --safe-area-inset-bottom: calc(100vh - var(--tg-viewport-stable-height, 100vh));
+}
+
+html {
+  font-family: 'SF Pro Display', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-display: swap;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.pb-safe-area {
+  padding-bottom: calc(var(--safe-area-inset-bottom) + 0.5rem);
+}
