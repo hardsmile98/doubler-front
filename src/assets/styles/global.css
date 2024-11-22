@@ -18,5 +18,5 @@ body {
 }
 
 .pb-safe-area {
-  padding-bottom: calc(var(--safe-area-inset-bottom) + 0.5rem);
+  padding-bottom: calc(var(--safe-area-inset-bottom));
 }

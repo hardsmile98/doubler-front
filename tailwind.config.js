@@ -29,8 +29,16 @@ export default {
           dark: '#1E2432',
         },
       },
+      success: {
+        light: '#12C57E',
+        dark: '#12C57E',
+      },
+      error: {
+        light: '#ff3333',
+        dark: '#ff3333',
+      },
       separator: {
-        light: '#F2F2F2',
+        light: '#E1E1E1',
         dark: '#3A435A',
       },
     },
