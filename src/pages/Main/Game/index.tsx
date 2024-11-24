@@ -52,7 +52,7 @@ function Game() {
   };
 
   return (
-    <div className='h-[100%] flex items-center justify-center'>
+    <div className='h-[100%] flex items-center justify-center py-3'>
       <div className='rounded-xl w-[150px] h-[150px] overflow-hidden'>
         <div ref={slotRef}>
           {items.map((prize, index) => (

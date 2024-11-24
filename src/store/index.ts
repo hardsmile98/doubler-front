@@ -6,11 +6,13 @@ import {
 import { configureStore } from '@reduxjs/toolkit';
 import { publicApi } from '../services/api';
 import userSlice from './slices/user';
+import uiSlice from './slices/ui';
 
 const store = configureStore({
   reducer: {
     [publicApi.reducerPath]: publicApi.reducer,
     user: userSlice,
+    ui: uiSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(publicApi.middleware),
 });

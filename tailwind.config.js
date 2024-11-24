@@ -19,6 +19,28 @@ export default {
           dark: '#C2C2C2',
         },
       },
+      notification: {
+        success: {
+          bg: '#f0fdf4',
+          icon: '#4ade80',
+          label: '#166534',
+        },
+        info: {
+          bg: '#eff6ff',
+          icon: '#60a5fa',
+          label: '#1d4ed8',
+        },
+        error: {
+          bg: '#fef2f2',
+          icon: '#f87171',
+          label: '#991b1b',
+        },
+        warning: {
+          bg: '#fefce8',
+          icon: '#facc15',
+          label: '#854d0e',
+        },
+      },
       bg: {
         primary: {
           light: '#FCFCFC',
