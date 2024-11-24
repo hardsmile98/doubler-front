@@ -20,7 +20,7 @@ function Tabs() {
   const [tab, setTab] = useState(Tab.BET);
 
   return (
-    <div className='min-h-[315px] p-3 bg-bg-secondary-light dark:bg-bg-secondary-dark rounded-xl flex flex-col'>
+    <div className='min-h-[320px] p-3 bg-bg-secondary-light dark:bg-bg-secondary-dark rounded-xl flex flex-col'>
       <ul className='flex items-center mb-4'>
         {Object.keys(tabs).map((key) => (
           <li className='grow' key={key}>
