@@ -1,10 +1,28 @@
 import { useState } from 'react';
 import TonIcon from '@/assets/images/ton.svg?react';
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import { useDoublerContract } from '@/hooks';
 
 const defaultBets = ['0.1', '0.2', '0.5', '1'];
 
 function Bet() {
   const [amount, setAmount] = useState('0.1');
+
+  const wallet = useTonWallet();
+
+  const [tonConnectUI] = useTonConnectUI();
+
+  const { sendBet } = useDoublerContract();
+
+  const handleBet = () => {
+    if (!wallet) {
+      tonConnectUI.openModal();
+
+      return;
+    }
+
+    sendBet(BigInt(+amount * 1_000_000_000));
+  };
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
@@ -42,6 +60,7 @@ function Bet() {
 
       <button
         disabled={+amount < 0.1}
+        onClick={handleBet}
         className='w-[100%] h-[50px] bg-primary-light dark:bg-primary-dark text-white font-semibold p-3 rounded-xl disabled:grayscale disabled:cursor-not-allowed'
       >
         Make bet

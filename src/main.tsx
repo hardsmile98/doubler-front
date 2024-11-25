@@ -12,7 +12,8 @@ window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
 
 // this manifest is used temporarily for development purposes
-const manifestUrl = 'https://CamelNotFemale.github.io/ton-dApp/tonconnect-manifest.json';
+const manifestUrl =
+  'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
