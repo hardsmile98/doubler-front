@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TonIcon from '@/assets/images/ton.svg?react';
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import { useDoublerContract } from '@/hooks';
+import { toNano } from '@ton/core';
 
 const defaultBets = ['0.1', '0.2', '0.5', '1'];
 
@@ -14,14 +15,14 @@ function Bet() {
 
   const { sendBet } = useDoublerContract();
 
-  const handleBet = () => {
+  const handleBet = async () => {
     if (!wallet) {
       tonConnectUI.openModal();
 
       return;
     }
 
-    sendBet(BigInt(+amount * 1_000_000_000));
+    sendBet(toNano(amount))?.then((xx) => console.log(xx));
   };
 
   return (
