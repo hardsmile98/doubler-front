@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Wallet from './Wallet';
 import ThemeSwitcher from './ThemeSwitcher';
+import MyBalance from './MyBalance';
 
 function Header() {
   return (
@@ -10,6 +11,8 @@ function Header() {
       </Link>
 
       <div className='shrink-0 flex items-center gap-3'>
+        <MyBalance />
+
         <ThemeSwitcher />
 
         <Wallet />

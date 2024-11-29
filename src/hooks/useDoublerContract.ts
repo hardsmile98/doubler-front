@@ -18,7 +18,6 @@ function useDoublerContract() {
   }, [client]);
 
   return {
-    address: doublerContract?.address?.toString(),
     sendBet: (value: bigint) => {
       return doublerContract?.sendBet(sender, value);
     },
