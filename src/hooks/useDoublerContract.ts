@@ -18,8 +18,8 @@ function useDoublerContract() {
   }, [client]);
 
   return {
-    sendBet: (value: bigint) => {
-      return doublerContract?.sendBet(sender, value);
+    sendBet: (value: bigint, betId: number) => {
+      return doublerContract?.sendBet(sender, value, betId);
     },
   };
 }

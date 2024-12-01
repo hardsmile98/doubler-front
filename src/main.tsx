@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,13 +15,11 @@ const manifestUrl =
   'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <TonConnectUIProvider manifestUrl={manifestUrl}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </TonConnectUIProvider>
-  </StrictMode>,
+  <TonConnectUIProvider manifestUrl={manifestUrl}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </TonConnectUIProvider>,
 );

@@ -9,6 +9,11 @@ import {
   SendMode,
 } from '@ton/core';
 
+export const opCodes = {
+  bet: 1001,
+  win: 1002,
+};
+
 export type DoublerConfig = {};
 
 export function doublerConfigToCell(): Cell {
@@ -39,11 +44,11 @@ export class Doubler implements Contract {
     });
   }
 
-  async sendBet(provider: ContractProvider, via: Sender, value: bigint) {
+  async sendBet(provider: ContractProvider, via: Sender, value: bigint, queryId: number) {
     await provider.internal(via, {
       value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell().storeUint(1001, 32).endCell(),
+      body: beginCell().storeUint(1001, 32).storeUint(queryId, 64).endCell(),
     });
   }
 }

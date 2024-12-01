@@ -1,15 +1,22 @@
 import prizeX0 from '@/assets/images/x0.webp';
 import prizeX2 from '@/assets/images/x2.webp';
 import { shuffle } from '@/helpers';
+import { useDispatch } from '@/store';
+import { openNotification } from '@/store/slices/ui';
+import { Status } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 
 const prizes = [prizeX0, prizeX2];
 
 const totalDuplicates = 8;
 const defaultSize = 150;
+const animationDurationMs = 6000;
 
 function Game() {
+  const dispatch = useDispatch();
+
   const slotRef = useRef<null | HTMLDivElement>(null);
+  const notificationRef = useRef<NodeJS.Timeout | null>(null);
 
   const [items, setItems] = useState<string[]>(prizes);
 
@@ -27,9 +34,11 @@ function Game() {
     buildItemLists();
   }, []);
 
-  const startAnimation = () => {
+  const startAnimation = (status: Status) => {
     if (slotRef.current) {
-      buildItemLists(0);
+      const isWin = status === Status.WIN;
+
+      buildItemLists(isWin ? 1 : 0);
 
       const totalHeight = prizes.length * totalDuplicates * defaultSize;
 
@@ -43,13 +52,33 @@ function Game() {
           },
         ],
         {
-          duration: 6000,
+          duration: animationDurationMs,
           fill: 'forwards',
           easing: 'ease-in-out',
         },
       );
+
+      notificationRef.current = setTimeout(
+        () =>
+          dispatch(
+            openNotification({
+              type: isWin ? 'success' : 'error',
+              text: isWin ? 'You won' : 'You lost',
+            }),
+          ),
+        animationDurationMs,
+      );
     }
   };
+
+  useEffect(
+    () => () => {
+      if (notificationRef.current) {
+        clearTimeout(notificationRef.current);
+      }
+    },
+    [],
+  );
 
   return (
     <div className='h-[100%] flex items-center justify-center py-3'>

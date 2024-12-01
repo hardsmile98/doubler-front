@@ -22,3 +22,15 @@ export interface IUser {
   giftsReceived: number;
   giftsSent: number;
 }
+
+export type Game = {
+  id: string;
+  address: string;
+  amount: string;
+  status: Status;
+};
+
+export enum Status {
+  WIN = 'win',
+  LOSE = 'lose',
+}

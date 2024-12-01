@@ -9,10 +9,12 @@ function MyBalance() {
   const [isLoading, setLoading] = useState(true);
 
   const client = useTonClient();
-  const { address } = useTonConnect();
+  const { address, connected } = useTonConnect();
 
   const getBalance = useCallback(async () => {
     if (!address) {
+      setBalance(null);
+
       return;
     }
 
@@ -38,6 +40,10 @@ function MyBalance() {
       }
     };
   }, [getBalance]);
+
+  if (!connected) {
+    return null;
+  }
 
   return (
     <div className='text-sm'>

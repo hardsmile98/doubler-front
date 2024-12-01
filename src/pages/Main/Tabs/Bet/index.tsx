@@ -15,14 +15,14 @@ function Bet() {
 
   const { sendBet } = useDoublerContract();
 
-  const handleBet = async () => {
+  const handleBet = () => {
     if (!wallet) {
       tonConnectUI.openModal();
 
       return;
     }
 
-    sendBet(toNano(amount))?.then((xx) => console.log(xx));
+    sendBet(toNano(amount), 1);
   };
 
   return (
