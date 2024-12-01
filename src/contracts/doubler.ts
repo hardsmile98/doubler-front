@@ -48,7 +48,7 @@ export class Doubler implements Contract {
     await provider.internal(via, {
       value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell().storeUint(1001, 32).storeUint(queryId, 64).endCell(),
+      body: beginCell().storeUint(opCodes.bet, 32).storeUint(queryId, 64).endCell(),
     });
   }
 }
