@@ -4,7 +4,8 @@ import { shuffle } from '@/helpers';
 import { useDispatch } from '@/store';
 import { openNotification } from '@/store/slices/ui';
 import { Status } from '@/types';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import useGetGame from './useGetGame';
 
 const prizes = [prizeX0, prizeX2];
 
@@ -34,42 +35,53 @@ function Game() {
     buildItemLists();
   }, []);
 
-  const startAnimation = (status: Status) => {
-    if (slotRef.current) {
-      const isWin = status === Status.WIN;
+  const startAnimation = useCallback(
+    (status: Status) => {
+      if (slotRef.current) {
+        const isWin = status === Status.WIN;
 
-      buildItemLists(isWin ? 1 : 0);
+        buildItemLists(isWin ? 1 : 0);
 
-      const totalHeight = prizes.length * totalDuplicates * defaultSize;
+        const totalHeight = prizes.length * totalDuplicates * defaultSize;
 
-      slotRef.current.animate(
-        [
+        slotRef.current.animate(
+          [
+            {
+              transform: 'translateY(0)',
+            },
+            {
+              transform: `translateY(-${totalHeight}px)`,
+            },
+          ],
           {
-            transform: 'translateY(0)',
+            duration: animationDurationMs,
+            fill: 'forwards',
+            easing: 'ease-in-out',
           },
-          {
-            transform: `translateY(-${totalHeight}px)`,
-          },
-        ],
-        {
-          duration: animationDurationMs,
-          fill: 'forwards',
-          easing: 'ease-in-out',
-        },
-      );
+        );
 
-      notificationRef.current = setTimeout(
-        () =>
-          dispatch(
-            openNotification({
-              type: isWin ? 'success' : 'error',
-              text: isWin ? 'You won' : 'You lost',
-            }),
-          ),
-        animationDurationMs,
-      );
+        notificationRef.current = setTimeout(
+          () =>
+            dispatch(
+              openNotification({
+                type: isWin ? 'success' : 'error',
+                text: isWin ? 'You won' : 'You lost',
+              }),
+            ),
+          animationDurationMs,
+        );
+      }
+    },
+    [dispatch],
+  );
+
+  const betResult = useGetGame();
+
+  useEffect(() => {
+    if (betResult) {
+      startAnimation(betResult.status);
     }
-  };
+  }, [startAnimation, betResult]);
 
   useEffect(
     () => () => {

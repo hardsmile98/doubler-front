@@ -30,6 +30,10 @@ export type Game = {
   status: Status;
 };
 
+export type BetResult = {
+  status: Status;
+};
+
 export enum Status {
   WIN = 'win',
   LOSE = 'lose',

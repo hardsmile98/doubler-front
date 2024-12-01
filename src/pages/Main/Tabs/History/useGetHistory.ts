@@ -1,59 +1,83 @@
+import { useCallback, useEffect, useState } from 'react';
 import { envs } from '@/constants';
 import { opCodes } from '@/contracts/doubler';
 import { useTonClient } from '@/hooks';
-import { Address, fromNano } from '@ton/core';
-import { useCallback, useEffect, useState } from 'react';
+import { Address, fromNano, Transaction } from '@ton/core';
 import { Status, type Game } from '@/types';
 
+/**
+ * Hook for getting game history
+ * @param limit - number of games
+ */
 const useGetHistory = ({ limit }: { limit: number }) => {
   const [history, setHistory] = useState<Game[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isError, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const client = useTonClient();
 
+  /**
+   * Formatting a transaction into a game format
+   */
+  const formatTransaction = useCallback((tx: Transaction) => {
+    const address = tx.inMessage?.info.src?.toString() || '-';
+    const amount =
+      tx.inMessage && 'value' in tx.inMessage.info ? fromNano(tx.inMessage.info.value.coins) : '-';
+    const status = tx.outMessagesCount === 1 ? Status.WIN : Status.LOSE;
+
+    return {
+      id: tx.hash().toString('hex'),
+      address,
+      amount,
+      status,
+    };
+  }, []);
+
+  /**
+   * Transaction filtering and processing
+   */
+  const filterTransactions = useCallback((txs: Transaction[]) => {
+    return txs.filter((tx) => {
+      try {
+        const bodyInMessage = tx.inMessage?.body;
+        const ds = bodyInMessage?.beginParse();
+        const opCode = ds?.loadUint(32);
+
+        return opCode === opCodes.bet;
+      } catch (error) {
+        console.error('Error parsing message body:', error);
+        return false;
+      }
+    });
+  }, []);
+
+  /**
+   * Loading transaction history
+   */
   const getHistoryTxs = useCallback(async () => {
+    if (!client) return;
+
+    setIsLoading(true);
+    setIsError(false);
+
     try {
-      setLoading(true);
-
-      const txs = await client?.getTransactions(Address.parse(envs.contractAddress), {
+      const txs = await client.getTransactions(Address.parse(envs.contractAddress), {
         limit,
+        archival: true,
       });
 
-      const filtered = txs?.filter((tx) => {
-        try {
-          const bodyInMessage = tx.inMessage?.body;
+      const filtered = filterTransactions(txs);
 
-          const ds = bodyInMessage?.beginParse();
-
-          const opCode = ds?.loadUint(32);
-
-          return opCode === opCodes.bet;
-        } catch (e) {
-          console.log('Error parsing message body: ', e);
-        }
-      });
-
-      const formatted = (filtered || []).map((tx) => ({
-        id: tx.hash().toString('hex'),
-        address: tx.inMessage?.info.src?.toString() || '-',
-        amount:
-          tx.inMessage && 'value' in tx.inMessage?.info
-            ? fromNano(tx.inMessage.info.value.coins)
-            : '-',
-        status: tx.outMessagesCount === 1 ? Status.WIN : Status.LOSE,
-      }));
+      const formatted = filtered.map(formatTransaction);
 
       setHistory(formatted);
-
-      setLoading(false);
-    } catch (e) {
-      console.log('Error get transactions: ', e);
-
-      setLoading(false);
-      setError(true);
+    } catch (error) {
+      console.error('Error while receiving transactions:', error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
-  }, [limit, client]);
+  }, [client, limit, filterTransactions, formatTransaction]);
 
   useEffect(() => {
     getHistoryTxs();

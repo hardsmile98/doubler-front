@@ -10,7 +10,6 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
 
-// this manifest is used temporarily for development purposes
 const manifestUrl =
   'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json';
 
