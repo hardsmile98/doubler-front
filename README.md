@@ -4,6 +4,8 @@
 
 ## Preview
 
+![Preview](preview.gif)
+
 ## Stacks
 
 - React
@@ -18,10 +20,6 @@
 3.	If you win, the smart contract sends back an amount twice the size of your initial bet. If you lose, the funds are not returned.
 
 ### Setup
-
-```
-npm install or yarn install
-```
 
 #### Add .env file to root directory
 
